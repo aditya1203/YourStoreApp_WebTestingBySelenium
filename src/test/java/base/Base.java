@@ -6,10 +6,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import configReader.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
@@ -19,7 +16,7 @@ public class Base {
     protected WebDriver driver;
     protected ConfigReader reader=new ConfigReader();
     protected ExtentReports ls=new ExtentReports();
-    @BeforeMethod
+    @BeforeClass
     public void setup(){
        // ConfigReader reader=new ConfigReader();
         String url=reader.getProperties("url");
@@ -31,20 +28,20 @@ public class Base {
     }
 
     //Creating TestNg Reports
-    @BeforeTest
+    @BeforeSuite
     public void createReport() {
         //ExtentReports ls=new ExtentReports();
         ExtentSparkReporter spark=new ExtentSparkReporter(reader.getProperties("report.path"));
         ls.attachReporter(spark);
         ExtentTest test=ls.createTest("Buy phone");
     }
-    @AfterTest
+    @AfterSuite
     public void flushReport(){
         ls.flush();
     }
 
-    @AfterMethod
 
+    @AfterClass
     public void tearDown(){
         if(driver!=null){
             driver.quit();
